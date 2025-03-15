@@ -6,4 +6,4 @@ This project contains a simple todo application which have the following feature
 
 - Create todos, update todos and delete todos.
 
-- And all your data will get stored in the mongoDB database.
+- And all your data will get stored in the mongoDB.
