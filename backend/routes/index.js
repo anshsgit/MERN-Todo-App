@@ -1,7 +1,7 @@
 const {User, Todo} = require('../db/index');
 const {userAuthorization, passkey} = require('../authentication/index');
 const jwt = require('jsonwebtoken');
-
+const path = require('path');
 const { Router } = require('express');
 const route = Router();
 const bcrypt = require('bcrypt');
@@ -34,10 +34,12 @@ route.post('/signup', async (req, res) => {
                     username,
                     password: hash
                 });
-                res.status(200).json({message: "User created successfully."})
+                const user = await User.findOne({username});
+                const token = jwt.sign({_id: user._id.toString()}, passkey);
+                res.status(200).json({token});
             } catch(error) {
                 console.error("Error in creating the user: " +error);
-                res.status(500).json({message: "Error in creating the user."})
+                res.status(500).json({message: error.message})
             }
         
     
@@ -49,8 +51,11 @@ route.post('/login', async (req, res) => {
     const {username, password} = req.body;
     try{
         const user = await User.findOne({username});
+        console.log(user);
         const hash = user.password;
         const result = await bcrypt.compare(password, hash);
+        console.log("req.body",result)
+
         if(result) {
             const token = jwt.sign({_id: user._id.toString()}, passkey, {expiresIn: '1h'});
             res.status(200).json({token});
@@ -149,6 +154,10 @@ route.delete('/todos/:id', userAuthorization, async (req, res) => {
         res.status(500).json({message: "Error in deleting the todo."});
     }
     
+}) 
+
+route.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '../../frontend/index.html'));
 })
 
 route.use((req, res) => {
