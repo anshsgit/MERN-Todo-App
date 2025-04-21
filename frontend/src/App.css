@@ -1,0 +1,7 @@
+#root {
+  width: 50%;
+  min-width: 400px;
+  margin: 0 auto;
+  font-size: 24px;
+  box-sizing: border-box;
+}
