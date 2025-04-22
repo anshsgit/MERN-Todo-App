@@ -49,7 +49,7 @@ function Signup({setToken, setError, clearTodos}) {
     
         <input type='text' id='password' placeholder='Enter password' ref={passwordRef}/>
     
-        <input type='button' value='Sign up' onClick={onPress}/>
+        <input type='button' value='Sign up' onClick={onPress} style={{marginTop: '10px'}}/>
     
 </div>
 }
