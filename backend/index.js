@@ -1,4 +1,7 @@
-const route = require("/Users/anshgupta/Desktop/javascript/FullStack-TodoApp/backend/routes/index.js")
+const path = require('path');
+const file = path.join(__dirname, 'routes', 'index.js');
+console.log(file);
+const route = require(file);
 const cors = require('cors');
 
 const express = require('express');
