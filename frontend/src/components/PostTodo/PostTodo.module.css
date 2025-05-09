@@ -1,0 +1,16 @@
+.postContainer {
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: space-between; 
+    border: 1px solid black; 
+    margin-top: 10px;
+}
+
+.postContainer h3 {
+    margin: 0 0 10px 0;
+}
+
+.addButton {
+    margin-top: 10px
+}

@@ -1,0 +1,19 @@
+.layoutContainer header {
+    display: flex; 
+    justify-content: space-between; 
+    background-color: #E884BA; 
+    padding: 20px; 
+    border-radius: 15px 0px 0px 0px;
+}
+
+.navLink {
+    align-self: center; 
+    text-decoration: none; 
+    background-color: white; 
+    padding: 10px 20px 10px 20px; 
+    border-radius: 10px;
+}
+
+.outlet {
+    margin: 10px 0 0 0;
+}

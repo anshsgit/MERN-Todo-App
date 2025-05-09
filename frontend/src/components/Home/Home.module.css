@@ -1,0 +1,9 @@
+.homeContainer {
+    margin-top: 50px;
+}
+
+.headingContainer {
+    display: flex; 
+    justify-content: center; 
+    margin-top: 25px;
+}
