@@ -17,6 +17,7 @@ route.post('/signup', async (req, res) => {
             password: z.string().min(8,{message: "Must be 8 char long."}).max(50).regex(specialCharRegex, {message: "password must contain one special case character."}).regex(upperCaseRegex, {message: "password must contain one upper case character."}).regex(lowerCaseRegex, {message: "password must contain one lower case character."})
         });
         const parsedData = requiredBody.safeParse(req.body);
+        console.log(parsedData);
 
         if(!parsedData.success){
 
@@ -26,7 +27,7 @@ route.post('/signup', async (req, res) => {
             })
         } else {
 
-            const {fullname, username, password} = req.body;
+            const {fullname, username, password} = parsedData.data;
             try{
                 const hash = await bcrypt.hash(password, 5);
                 await User.create({
@@ -50,7 +51,7 @@ route.post('/signup', async (req, res) => {
 route.post('/login', async (req, res) => {
     const {username, password} = req.body;
     try{
-        const user = await User.findOne({username});
+        const user = await User.findOne({username: username.toLowerCase()});
         console.log(user);
         const hash = user.password;
         const result = await bcrypt.compare(password, hash);
@@ -63,7 +64,7 @@ route.post('/login', async (req, res) => {
             res.status(400).json({message: "Bad request."})
         }
     } catch(error) {
-        res.status(500).json({message: "Error in authorizing the user."})
+        res.status(500).json({error: error.message})
         console.error(`Error in authorizing the user: ${error}`);
     }
 })
@@ -87,7 +88,7 @@ route.get('/todos/:id', userAuthorization, async (req, res) => {
 });
 
 route.post('/todos', userAuthorization, async (req, res) => {
-    const {title, description, doneBy} = req.body;
+    const {title, description} = req.body;
     const date = new Date();
     let currentTime = `${date.getHours()}:${date.getMinutes()}`
     try{
@@ -98,8 +99,7 @@ route.post('/todos', userAuthorization, async (req, res) => {
             title,
             description,
             done: false,
-            createdAt: currentTime,
-            doneBy
+            createdAt: currentTime
         });
         res.status(200).json({message: "Todo saved successfully."});
 
@@ -112,7 +112,7 @@ route.post('/todos', userAuthorization, async (req, res) => {
 
 route.put('/todos/:id', userAuthorization, async (req, res) => {
     const id = req.params.id;
-    const {title, description, doneBy} = req.body;
+    const {title, description} = req.body;
     const date = new Date();
     let currentTime = `${date.getHours()}:${date.getMinutes()}`
     try{
@@ -120,7 +120,6 @@ route.put('/todos/:id', userAuthorization, async (req, res) => {
     todo.title = title;
     todo.description = description;
     todo.createdAt = currentTime;
-    todo.doneBy = doneBy;
     await todo.save();
     res.status(200).json({message: "Todo updated successfully."});
     } catch(error) {
