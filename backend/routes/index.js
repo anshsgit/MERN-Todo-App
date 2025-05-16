@@ -50,12 +50,15 @@ route.post('/signup', async (req, res) => {
 
 route.post('/login', async (req, res) => {
     const {username, password} = req.body;
+    console.log(password);
     try{
         const user = await User.findOne({username: username.toLowerCase()});
-        console.log(user);
+        console.log('user: ', user);
         const hash = user.password;
+
+        console.log('hash: ', hash);
         const result = await bcrypt.compare(password, hash);
-        console.log("req.body",result)
+        console.log("req.body ",result)
 
         if(result) {
             const token = jwt.sign({_id: user._id.toString()}, passkey, {expiresIn: '1h'});
@@ -133,7 +136,7 @@ route.put('/todoDone/:id', userAuthorization, async (req, res) => {
     const id = req.params.id;
     try{
         const todo = await Todo.findOne({_id:id});
-        todo.done = true;
+        todo.done = !todo.done;
         await todo.save();
         res.status(200).json({message: "Todo completed."});
     } catch(error) {
