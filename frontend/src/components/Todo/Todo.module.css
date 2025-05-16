@@ -1,0 +1,37 @@
+.todoContainer {
+    border: 1px solid black; 
+    border-radius: 5px; 
+    background-color: #F9CFD3; 
+    display: flex; 
+    justify-content: space-between;
+    margin-bottom: 10px; 
+    padding: 10px 20px 10px 20px;
+}
+
+.title {
+    margin: 0;
+    padding: 0;
+}
+
+.todoContainer p {
+    margin: 0;
+}
+
+.buttonContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 5px;
+}
+
+.buttonContainer button {
+    align-self: center;
+    font-size: 1.125rem;
+    padding: 3px 5px;
+    cursor: pointer;
+}
+
+.completeButton {
+    text-decoration: line-through;
+    opacity: 0.4;
+    transition: opacity 0.4s linear;
+}
