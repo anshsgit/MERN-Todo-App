@@ -16,7 +16,7 @@ function App() {
 
   return (
     <ContextProvider>
-    <BrowserRouter>
+    <BrowserRouter basename='/MERN-Todo-App'>
     <Routes>
       <Route path='/' element={<Layout />} >
         <Route index element={<Home />} />
