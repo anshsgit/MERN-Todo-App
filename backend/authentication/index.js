@@ -5,9 +5,9 @@ function userAuthorization(req, res, next) {
     try {
         let auth = req.headers.authorization;
         let token = auth.split(' ');
-        console.log(token[1]);
+        console.log('Token: ', token[1]);
         let verify = jwt.verify(token[1], passkey);
-        console.log(verify);
+        console.log('Verify: ', verify);
         if(verify) {
             req.id = verify._id;
             next();
