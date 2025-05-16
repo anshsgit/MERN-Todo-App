@@ -1,68 +1,41 @@
-import {useState, useRef} from 'react';
+import {useState, useRef, useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import axios from 'axios';
 import styles from './PostTodo.module.css';
+import { TodoContext } from '../../Context/Context'
 
-const PostTodo = ({setTodos, token, setError}) => {
-    const titleRef = useRef();
-    const descriptionRef = useRef();
-    const donebyRef = useRef();
+
+const PostTodo = () => {
+    const {create} = useContext(TodoContext);
+
+    const [todo, setTodo] = useState({
+        title: '',
+        description: ''
+    });
     const navigate = useNavigate();
 
-    function onPress() {
-        const title = titleRef.current.value;
-        const description = descriptionRef.current.value;
-        const doneBy = donebyRef.current.value;
-
-        axios({
-            method: 'post',
-            url: 'http://localhost:3000/todos',
-            data: {
-                title,
-                description,
-                doneBy
-            },
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        .then(postResponse);
+    function  handleChange(event) {
+        const {name, value} = event.target;
+        setTodo((todo) => {
+            return {...todo, [name]: value}});
     }
 
-    function postResponse(res) {
-        axios({
-            method: 'get',
-            url: 'http://localhost:3000/todos',
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-        .then(getResponse)
-        .catch(errorResponse);
+    function submit(event) {
+        event.preventDefault();
+        create(todo);
     }
 
-    function getResponse(res) {
-        setTodos(todos => res.data.todos);
-        
-    }
-
-    function errorResponse(error) {
-        setError(err => error.message);
-        navigate('/error');
-
-    }
 
     return <div className={styles.postContainer}>
-        <h3>Add todos</h3>
+        <h2>Add todos</h2>
 
-        <input id='title' type='text' placeholder='Enter title' ref={titleRef}/>
+        <form onSubmit={submit}>
+        <input name='title' id='title' type='text' placeholder='Enter title' onChange={handleChange}/>
+        <input name='description' id='description' type='text' placeholder='Enter description' onChange={handleChange}/>
 
-        <input id='description' type='text' placeholder='Enter description' ref={descriptionRef}/>
-        
-        <input id='doneby' type='text' placeholder='Enter time' ref={donebyRef}/>
+        <input className={styles.addButton} type='submit' value='Add todo' />
+        </form>
 
-        <button onClick={onPress} className={styles.addButton}>Add todo</button>
-        
     </div>
 }
 

@@ -1,8 +1,19 @@
 .signupContainer {
+    border: 1px solid black; 
+}
+
+.signupContainer,
+.formContainer{
     display: flex; 
     flex-direction: column; 
     align-items: center; 
-    margin-top: 50px;
+    width: 95%;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.formContainer input {
+    margin-bottom: 5px;
 }
 
 .signupButton {

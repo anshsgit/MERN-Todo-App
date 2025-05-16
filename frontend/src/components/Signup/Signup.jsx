@@ -1,22 +1,30 @@
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect, useRef, useContext} from 'react';
 import {useNavigate} from 'react-router-dom';
 import axios from "axios";
 import styles from './Signup.module.css';
+import { TodoContext } from '../../Context/Context';
 
-function Signup({setToken, setError, clearTodos}) {
-
-    const fullnameRef = useRef(null);
-    const usernameRef = useRef(null);
-    const passwordRef = useRef(null);
+function Signup() {
+    const {setToken, setError, clearTodos} = useContext(TodoContext);
+    const [user, setUser] = useState({
+        fullname: '',
+        username: '',
+        password: ''
+    });
     const navigate = useNavigate();
 
-    function onPress() {
-        clearTodos();
-        const fullname = fullnameRef.current.value;
-        const username = usernameRef.current.value;
-        const password = passwordRef.current.value;
+    const handleChange = (event) => {
+        const {name, value} = event.target;
+        setUser((user) => {
+            return {...user, [name]: value};
+        });
+    }
 
-        console.log(fullname, username, password);
+    function submit(event) {
+        event.preventDefault();
+        clearTodos();
+        const {fullname, username, password} = user;
+        console.log(user);
         axios({
             method: 'post',
             url: 'http://localhost:3000/signup',
@@ -42,16 +50,17 @@ function Signup({setToken, setError, clearTodos}) {
     }
 
     return <div className={styles.signupContainer}>
-    <h3>Signup Form</h3>
+    <h2>Signup Form</h2>
     
-        <input type='text' id='name' placeholder='Enter fullname' ref={fullnameRef}/>
+    <form className={styles.formContainer} onSubmit={submit}>
+        <input name='fullname' type='text' id='fullname' placeholder='Enter fullname' onChange={handleChange}/>
     
-        <input type='text' id='username' placeholder='Enter username' ref={usernameRef}/>
+        <input name='username' type='text' id='username' placeholder='Enter username' onChange={handleChange}/>
     
-        <input type='text' id='password' placeholder='Enter password' ref={passwordRef}/>
+        <input name='password' type='text' id='password' placeholder='Enter password' onChange={handleChange}/>
     
-        <input type='button' value='Sign up' onClick={onPress}  className={styles.signupButton}/>
-    
+        <input type='submit' value='Sign up' className={styles.signupButton}/>
+    </form>
 </div>
 }
 

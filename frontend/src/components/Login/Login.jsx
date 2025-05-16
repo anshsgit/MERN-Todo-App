@@ -1,18 +1,31 @@
 import {NavLink, Outlet, useNavigate} from 'react-router-dom';
-import {useState, useEffect, useRef} from 'react';
+import {useState, useEffect, useRef, useContext} from 'react';
 import axios from 'axios';
 import styles from './Login.module.css';
+import { TodoContext } from '../../Context/Context'
 
-function Login({setTodos, setToken, setError}) {
+function Login() {
+    const [user, setUser] = useState({
+        username: '',
+        password: ''
+    })
+    const {setTodos, setToken, setError} = useContext(TodoContext);
+
     const navigate = useNavigate();
     const signup = <p style={{fontSize: '18px'}}>New user? Sign up</p>;
-    const usernameRef = useRef(null);
-    const passwordRef = useRef(null);
 
-    function onPress() {
-        const username = usernameRef.current.value;
-        const password = passwordRef.current.value;
-        console.log("password",password)
+    const handleChange = (event) => {
+        const {name, value} = event.target;
+        setUser((user) => {
+            return {...user, [name]: value};
+        })
+    }
+
+    function submit(event) {
+        event.preventDefault();
+        const {username, password} = user;
+        console.log('User: ', user);
+        console.log('Password: ', password);
         axios({
             method: 'post',
             url: 'http://localhost:3000/login',
@@ -27,6 +40,7 @@ function Login({setTodos, setToken, setError}) {
 
     function loginResponse(res) {
         if(res.status === 200) {
+            console.log('Token in Login: ', res.data.token);
             setToken(token => res.data.token);
 
             axios({
@@ -45,7 +59,20 @@ function Login({setTodos, setToken, setError}) {
     function getReponse(res) {
         if(res.status === 200) {
             console.log(res.data.todos);
-            setTodos(todos => res.data.todos);
+            setTodos((todos) => {
+                return res.data.todos.map((todo) => {
+                    const { _id, userId, title, description, done, createdAt } = todo;
+                    return {
+                        _id: _id.toString(),
+                        userId: userId.toString(),
+                        title,
+                        description,
+                        done,
+                        createdAt
+                    }
+                })
+                
+            });
             navigate('/todos')
         }
     }
@@ -57,13 +84,15 @@ function Login({setTodos, setToken, setError}) {
     }
 
     return <div className={styles.loginContainer}>
-        <h3>Login Form</h3>
+        <h2>Login Form</h2>
 
-            <input type='text' id='username' placeholder='Enter username' ref={usernameRef} />
+            <form onSubmit={submit}>
+            <input name='username' type='text' id='username' placeholder='Enter username' onChange={handleChange} />
         
-            <input type='text' id='password' placeholder='Enter password' ref={passwordRef} />
+            <input name='password' type='text' id='password' placeholder='Enter password' onChange={handleChange} />
         
-            <input type='button' value='Login' onClick={onPress} style={{marginTop: '10px'}}/>
+            <input type='submit' value='Login' style={{marginTop: '10px'}}/>
+            </form>
 
         <NavLink to='/signup'>{signup}</NavLink>
     </div>

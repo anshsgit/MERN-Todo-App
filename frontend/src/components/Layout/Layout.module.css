@@ -1,7 +1,11 @@
+
 .layoutContainer header {
+    
+    width: 100%;
+    background-color: #E884BA; 
+    margin: 0 auto;
     display: flex; 
     justify-content: space-between; 
-    background-color: #E884BA; 
     padding: 20px; 
     border-radius: 15px 0px 0px 0px;
 }

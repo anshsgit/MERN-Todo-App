@@ -7,7 +7,7 @@ const Layout = () => {
 
     return <div className={styles.layoutContainer}>
         <header>
-            <h2>Todo App</h2>
+            <h1>Todo App</h1>
             <NavLink className={styles.navLink} to='/login'>Login</NavLink>
         </header>
 
