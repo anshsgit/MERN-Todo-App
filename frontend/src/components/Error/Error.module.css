@@ -1,4 +1,6 @@
 .errorContainer {
+    width: 95%;
+    max-width: 600px;
     display: flex; 
     justify-content: center; 
     border: 1px solid black; 
