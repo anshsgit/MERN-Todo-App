@@ -6,7 +6,7 @@ const Error = () => {
     const { error } = useContext(TodoContext);
 
     return <div className={styles.errorContainer}>
-    <div>{error} :Kindly try again.</div>
+    <div>{error}: Kindly try again.</div>
     </div>
 }
 
